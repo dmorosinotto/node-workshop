@@ -10,25 +10,25 @@ const App = require('../app')
 const clean = require('mongo-clean')
 const { MongoClient } = require('mongodb')
 const { beforeEach, tearDown } = require('tap')
-//USO VARIABILI GLOBALI SOLO PER I TEST!!!
+//USO VARIABILI GLOBALI SOLO PER I TEST PERCHE MI VIENE COMODO!!!
 const url = 'mongodb://localhost:27017'
 const database = 'tests'
 
 let client
 
 beforeEach(async function () { //ESEGUITO PRIMA DI OGNI TEST
-    if (!client) {
+    if (!client) { //CREO UNA CONNESIONE A MONGODB LA 1a VOLTA
         client = await MongoClient.connect(url, {
             w: 1,
             useNewUrlParser: true
         })
     }
-    await clean(client.db(database))
+    await clean(client.db(database)) //SVUOTA IL DATABASE MONGO PER AVER SITUAZIONE PULITA
 })
 
 tearDown(async function () { //ESEGUITO ALLA FINE DI TUTTI I TEST
     if (client) {
-        await client.close()
+        await client.close() //CHIUDE LA CONNESIONE A MONGODB ALLA FINE QUANDO HO FINITO TEST
         client = null
     }
 })
@@ -37,7 +37,7 @@ tearDown(async function () { //ESEGUITO ALLA FINE DI TUTTI I TEST
 // needed for testing the application
 function config() {
     return {
-        mongodb: {
+        mongodb: { //PASSO COME PARAMETRI AGGIUNTIVI "mongodb" CONNESIONE VIVA + DB TEST
             client,
             database
         }
