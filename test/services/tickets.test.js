@@ -79,3 +79,52 @@ test('create and get all', async (t) => {
     }]
   })
 })
+
+test('test 404', async (t) => {
+  const app = build(t)
+  const res1 = await app.inject({
+    method: 'GET',
+    url: '/tickets/6aa66a6aa666666aaaa6666a',
+  })
+
+  t.equal(res1.statusCode, 404)
+})
+
+test('valid id', async (t) => {
+  const app = build(t)
+  const res1 = await app.inject({
+    method: 'GET',
+    url: '/tickets/NOT_A_VALID_ID',
+  })
+
+  t.equal(res1.statusCode, 400)
+  t.equal(JSON.parse(res1.body).message, 'params.id should match pattern "[0-9a-f]{24}"')
+})
+
+test('do not create a ticket without a title', async (t) => {
+  const app = build(t)
+  const res1 = await app.inject({
+    method: 'POST',
+    url: '/tickets',
+    body: {
+      body: 'this is a long body'
+    }
+  })
+
+  t.equal(res1.statusCode, 400)
+  t.equal(JSON.parse(res1.body).message, 'body should have required property \'title\'')
+})
+
+test('do not create a ticket without a body', async (t) => {
+  const app = build(t)
+  const res1 = await app.inject({
+    method: 'POST',
+    url: '/tickets',
+    body: {
+      title: 'A support ticket'
+    }
+  })
+
+  t.equal(res1.statusCode, 400)
+  t.equal(JSON.parse(res1.body).message, 'body should have required property \'body\'')
+})
