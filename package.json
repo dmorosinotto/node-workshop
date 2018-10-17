@@ -1,0 +1,22 @@
+{
+  "name": "workshop",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "tap test/*.test.js test/*/*.test.js test/*/*/*.test.js",
+    "start": "fastify start -l info app.js",
+    "dev": "fastify start -l info -P app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "fastify": "^1.11.0",
+    "fastify-plugin": "^1.2.0",
+    "fastify-autoload": "^0.5.0",
+    "fastify-cli": "^0.22.1"
+  },
+  "devDependencies": {
+    "tap": "^12.0.0"
+  }
+}
