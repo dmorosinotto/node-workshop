@@ -20,6 +20,10 @@ module.exports = async function (app, opts) {
   const tickets = app.mongo.db.collection('tickets')
   const { ObjectId } = app.mongo
 
+  app.addHook('preHandler', function (req, reply) {
+    return req.jwtVerify() //QUESTA TORNA UNA PROMISE --> qui si integra bene con discorso di async function --> middleware x validare Auth
+  })
+
   app.post('/', {
     schema: {
       body: ticketSchema,
@@ -28,7 +32,9 @@ module.exports = async function (app, opts) {
       }
     }
   }, async function (req, reply) {
-    const data = await tickets.insertOne(req.body)
+    const data = await tickets.insertOne(Object.assign({
+      username: req.user.username,
+    }, req.body))
 
     const _id = data.ops[0]._id
 
@@ -56,7 +62,9 @@ module.exports = async function (app, opts) {
       }
     }
   }, async function (req, reply) {
-    const array = await tickets.find().sort({
+    const array = await tickets.find({
+      username: req.user.username
+    }).sort({
       _id: -1 // new tickets first
     }).toArray()
 
@@ -82,6 +90,7 @@ module.exports = async function (app, opts) {
     const id = req.params.id
     //console.log("ID=", id);
     const data = await tickets.findOne({
+      username: req.user.username,
       _id: new ObjectId(id)
     })
 

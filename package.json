@@ -12,6 +12,7 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
+        "@matteo.collina/fastify-auth-mongo-jwt": "^0.1.2",
         "fastify": "^1.11.0",
         "fastify-autoload": "^0.5.0",
         "fastify-cli": "^0.22.1",

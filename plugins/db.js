@@ -12,3 +12,6 @@ module.exports = fp(async function (fastify, opts) {
     //client + database GIA' APERTI IN MODO CHE fastify-plugin USA QUELLA CONNESIONE E NON NE APRE UNA IN BASE URL
     fastify.register(MongoDB, mongoOpts)
 })
+
+//LA REGISTRAZIONE DEL PARAMETRO JWT_SECRET LETTO DA .env E' FATTA DAL PLUGIN fastify-mongo-jwt
+//vedi: https://github.com/mcollina/fastify-auth-mongo-jwt/blob/master/index.js#L13-L17
